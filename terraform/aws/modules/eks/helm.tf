@@ -56,8 +56,22 @@ resource "helm_release" "kube-metrics" {
   name       = "aws-kube-metrics"
 
   repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "prometheus-community/kube-state-metrics"
+  chart      = "kube-state-metrics"
   namespace  = "kube-metrics"
+  create_namespace = true
+
+  depends_on = [
+    aws_eks_node_group.demo,
+  ]
+}
+
+resource "helm_release" "secrets-csi" {
+  name       = "csi-secrets-store"
+
+  repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+  chart      = "secrets-store-csi-driver"
+  namespace  = "kube-system"
+
 
   depends_on = [
     aws_eks_node_group.demo,
@@ -65,10 +79,11 @@ resource "helm_release" "kube-metrics" {
 }
 
 
+
 resource "helm_release" "ping-pong" {
   name       = "ping-pong"
 
-  chart      = "../../../../../helm/ping-pong"
+  chart      = "../../../../helm/ping-pong"
 
   set {
     name  = "image.repository"

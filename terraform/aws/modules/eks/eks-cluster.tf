@@ -37,7 +37,6 @@ resource "aws_security_group_rule" "demo-cluster-ingress-workstation-https" {
 resource "aws_kms_key" "eks_secret_key" {
   description             = "KMS key for Kubernetes Secrets"
   deletion_window_in_days = 7
-  policy = data.aws_iam_policy_document.kms.json
 }
 
 resource "aws_eks_cluster" "demo" {
