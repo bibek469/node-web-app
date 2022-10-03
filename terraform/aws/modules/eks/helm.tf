@@ -63,3 +63,24 @@ resource "helm_release" "kube-metrics" {
     aws_eks_node_group.demo,
   ]
 }
+
+
+resource "helm_release" "ping-pong" {
+  name       = "ping-pong"
+
+  chart      = "../../../../../helm/ping-pong"
+
+  set {
+    name  = "image.repository"
+    value = var.image_repo
+  }
+
+  set {
+    name  = "image.tag"
+    value = var.image_tag
+  }
+
+  depends_on = [
+    helm_release.aws_alb_controller,
+  ]
+}

@@ -59,3 +59,13 @@ variable "instance_types" {
   description = "List of instance types associated with the EKS Node Group. Defaults to [t3.medium]. Terraform will only perform drift detection if a configuration value is provided."
   default = ["t3-medium"]
 }
+
+variable "image_repo" {
+  description = "Image of the App to deploy"
+  default = "bibek469/node-web-app"
+}
+
+variable "image_tag" {
+  description = "Tag of the image of the App to deploy"
+  default = "v2"
+}

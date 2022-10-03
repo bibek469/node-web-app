@@ -11,6 +11,8 @@ module "ping-pong-cluster" {
     role-eks-demo-node = "ping-pong-eks-${local.env}-node"
     vpc-eks-tag-name = "ping-pong-cdn-eks-${local.env}-tag-name"
     cluster_ipv4_cidr = "10.5.0.0/16"
-    instance_types     = ["t3.medium"]
+    instance_types = ["t3.medium"]
+    image_repo = "bibek469/node-web-app"
+    image_tag = "v2"
 }
 
