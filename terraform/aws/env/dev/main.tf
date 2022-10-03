@@ -16,3 +16,6 @@ module "ping-pong-cluster" {
   image_tag          = "v2"
 }
 
+output "cluster_name" {
+  value = module.ping-pong-cluster.cluster_name
+}

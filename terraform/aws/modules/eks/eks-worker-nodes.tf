@@ -65,7 +65,6 @@ resource "null_resource" "delete_ingress" {
     EOT
   }
 
-
   provisioner "local-exec" {
     when = destroy
     command = <<EOT

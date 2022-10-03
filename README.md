@@ -50,3 +50,8 @@ Once the apply is successfull. Login to the cluster with below command.
 ```
 aws eks --region us-east-2 update-kubeconfig --name cluster_name (cluster_name will be found in terraform output)
 ``` 
+Now get the ingress host address with below command
+```
+kubectl get ingress -n ping-pong
+````
+Hit the url in the browser and will get the response on path /ping. This is http request.
