@@ -53,38 +53,4 @@ resource "null_resource" "delete_ingress" {
     aws_route_table.demo,
     aws_security_group_rule.demo-cluster-ingress-workstation-https
     ]
-
-  provisioner "local-exec" {
-    when = destroy
-    command = <<EOT
-      echo "Installing awscli"
-      apk add --no-cache python3 py3-pip
-      pip3 install --upgrade pip
-      pip3 install awscli
-      rm -rf /var/cache/apk/*
-    EOT
-  }
-
-  provisioner "local-exec" {
-    when = destroy
-    command = <<EOT
-    apk update && apk add curl
-    curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.17/bin/linux/amd64/kubectl
-    chmod u+x kubectl && mv kubectl /bin/kubectl
-    EOT
-  }
-
-  provisioner "local-exec" {
-    when = destroy
-    command = <<EOT
-      echo 'Applying Auth ConfigMap with kubectl...'
-      aws eks update-kubeconfig --name '${self.triggers.cluster_delete_name}' --alias '${self.triggers.cluster_delete_name}-${self.triggers.cluster_region}' --region=${self.triggers.cluster_region}
-    EOT
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl config use-context ${self.triggers.cluster_delete_name}-${self.triggers.cluster_region}; timeout 240 kubectl delete ingress -A --all"
-  }
-
 }
