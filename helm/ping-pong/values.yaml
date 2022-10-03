@@ -1,0 +1,68 @@
+applicationName: "ping-pong"
+environment: "demo"  
+project: "demo" 
+
+deploy:
+  replicaCount: 2
+  strategy: RollingUpdate
+  maxUnavail: 1
+  maxSurge: 1
+  terminationGracePeriodSeconds: 30
+  healthCheck:
+    liveFailThreshold: "2"
+    liveSuccThreshold: "1"
+    readFailThreshold: "2"
+    readSuccThreshold: "1"
+    delay: "10"
+    period: "4"
+    timeout: "2"
+
+ingress:
+  externalDNSenabled: false
+
+ports: #auto
+  - name: ping-pong
+    path: ping
+    containerPort: 3000
+    protocol: TCP
+
+image: 
+  repository: "bibek469/node-web-app"
+  pullPolicy: Always
+  tag: "v2"
+
+
+service:
+  type: nodeport
+  private: false
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+resourcequota:
+  quotaRequestsCpu: 100
+  quotaRequestsMem: 0.2
+  quotaLimitsCpu: 200
+  quotaLimitsMem: 0.3
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+lifecycle:
+  prestop:
+    command: '["sleep 30"]'
+
+
+secretEnvs: 
+  TOP_SECRET: "This_is_secret"
+
+envs:
+  PORT : "3000"
